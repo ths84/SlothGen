@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1af6391e-e180-4ba3-8dc1-9667ef36e15b" name="Changes" comment="" />
+    <list default="true" id="1af6391e-e180-4ba3-8dc1-9667ef36e15b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/names_db.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/names_db.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webScraping.py" beforeDir="false" afterPath="$PROJECT_DIR$/webScraping.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +21,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
       <filtered-out-file-type name="LOCAL_BRANCH" />
@@ -26,6 +33,7 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1wftbCM5BJUxhEN8TI3REtsTmDX" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,7 +43,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.general" />
   </component>
-  <component name="RunManager" selected="Python.temp">
+  <component name="RunManager" selected="Python.webScraping">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="RandomNameGenerator" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -143,8 +151,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.temp" />
         <item itemvalue="Python.webScraping" />
+        <item itemvalue="Python.temp" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.testWriteExcel" />
       </list>
