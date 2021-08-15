@@ -1,22 +1,20 @@
 from bs4 import BeautifulSoup
 import requests
-import time
 import openpyxl as xl
 
 
-def web_scrape():
-    start = time.time()
-    wb = xl.Workbook()
+def web_scrape_first_names(wb_filename):
+    wb = xl.load_workbook(wb_filename)
     sheet = wb.active
-    sheet.title = "sheet1"
     url_root = 'https://www.vorname.com'
-    url_gender = ['maedchennamen', 'jungennamen']
+    url_part2 = ['maedchennamen', 'jungennamen']
     column = 0
-    for url_gender_combine in url_gender:
+    for part_in_url_part2 in url_part2:
         row = 1
         column += 1
-        for letter in range(ord('A'), ord('Z') + 1):
-            url_combine = f'{url_root}/{url_gender_combine},{chr(letter)},1.html'
+        for url_part3 in range(ord('A'), ord('Z') + 1):
+            wb.save(wb_filename)
+            url_combine = f'{url_root}/{part_in_url_part2},{chr(url_part3)},1.html'
             response = requests.get(url_combine)
             if response.status_code == 200:
                 html_source = requests.get(url_combine).text
@@ -51,9 +49,4 @@ def web_scrape():
             else:
                 print(f'{url_combine} not on server... continuing...')
 
-    wb.save('names_db.xlsx')
-    end = time.time()
-    print(f'\n{end - start}')
-
-
-web_scrape()
+    wb.save(wb_filename)

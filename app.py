@@ -1,6 +1,8 @@
 import random
+import time
 import openpyxl as xl
-
+import webscraping_first_names as get_first_names
+import webscraping_last_names as get_last_names
 
 def process_workbook():
     wb = xl.load_workbook('tab_namen.xlsx')
@@ -40,4 +42,30 @@ def process_workbook():
     print(f'{cell_first_name.value} {cell_second_name.value} {cell_last_name.value}')
 
 
-process_workbook()
+result = input("[C]reate or [W]ork with existing database? ").capitalize()
+
+if result == 'C':
+    filename = input('Name your database: ')
+    wb_filename = f'{filename}.xlsx'
+
+    start = time.process_time()
+    wb = xl.Workbook()
+    sheet = wb.active
+    sheet.title = "sheet1"
+    wb.save(wb_filename)
+
+    # Scrape first names (female + male) from vornamen.com
+    get_first_names.web_scrape_first_names(wb_filename)
+    # Scrape last names (German) from wikipedia.de
+    get_last_names.scraping_last_names_wikipedia(wb_filename)
+    # Scrape last names from familyeducation.com
+    get_last_names.scraping_last_names_familyeducationdotcom(wb_filename)
+
+    end = time.time()
+    print(time.process_time() - start)
+
+elif result == 'W':
+    print('Thanks!')
+
+
+
