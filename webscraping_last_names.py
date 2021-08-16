@@ -15,7 +15,7 @@ def scraping_last_names_wikipedia(wb_filename):
         wb = xl.load_workbook(wb_filename)
         sheet = wb["sheet1"]
         row = 1
-        column = 3
+        column = 2
         for name in content_block.find_all('a', title=True):
             cell = sheet.cell(row, column)
             cell.value = name.text
@@ -31,9 +31,9 @@ def scraping_last_names_wikipedia(wb_filename):
 def scraping_last_names_familyeducationdotcom(wb_filename):
     wb = xl.load_workbook(wb_filename)
     sheet = wb["sheet1"]
-    column = 3
+    column = 2
     # Get starting row in Excel sheet to append new names to existing ones
-    for row in sheet.iter_cols(min_row=1, min_col=3, max_col=3):
+    for row in sheet.iter_cols(min_row=1, min_col=2, max_col=2):
         for cell in row:
             if cell.value is not None:
                 starting_row = cell.row
