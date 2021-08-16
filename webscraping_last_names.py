@@ -20,7 +20,8 @@ def scraping_last_names_wikipedia(wb_filename):
             cell = sheet.cell(row, column)
             cell.value = name.text
             row += 1
-            print(f'... {row} {cell.value}')
+            print(f'... {row} ... {cell.value}')
+        print('DONE ... SAVING.')
     else:
         print(f'{url} not on server... continuing...')
 
@@ -87,6 +88,7 @@ def scraping_last_names_familyeducationdotcom(wb_filename):
                         cell.value = name.text
                         starting_row += 1
                         print(f'... {starting_row} ... {cell.value}')
+                print(f'Letter {chr(url_appendix)} ... DONE.')
             else:
                 print(f'No pagination found on site; continuing with name scrape ...')
                 html_source = requests.get(f'{url_root}/{chr(url_appendix)}').text
@@ -99,6 +101,7 @@ def scraping_last_names_familyeducationdotcom(wb_filename):
                     cell.value = name.text
                     starting_row += 1
                     print(f'... {starting_row} ... {cell.value}')
+                print(f'Letter {chr(url_appendix)} ... DONE ... SAVING.')
 
         else:
             print(f'{url_root} not on server... continuing...')

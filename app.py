@@ -1,11 +1,60 @@
 import random
-import time
+import datetime
 import openpyxl as xl
 import webscraping_first_names as get_first_names
 import webscraping_last_names as get_last_names
+from pathlib import Path
 
-def process_workbook():
-    wb = xl.load_workbook('tab_namen.xlsx')
+
+def rng_intro():
+    print(f"""
+RNG v0.1 randomly combines two first names and one last name.
+RNG v0.1 is able to build a database for first and last names before starting the randomizing process.
+
+First names will be scraped from: https://www.vorname.com
+Last names will be scraped from:  https://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Namen
+                                  https://www.familyeducation.com
+
+*** Creating a new database will initiate the web scraping process. This may take some time... ***
+    """)
+
+
+def convert_timedelta(duration):
+    seconds = duration.seconds
+    minutes = (seconds % 3600) // 60
+    seconds = (seconds % 60)
+    return minutes, seconds
+
+
+def statistics(wb_filename):
+    wb = xl.load_workbook(wb_filename)
+    sheet = wb['sheet1']
+
+    for column in range(1, sheet.max_column + 1):
+        compare_row = sheet.min_row
+        for row in range(1, sheet.max_row + 1):
+            cell = sheet.cell(row, column)
+            if cell.value is not None and column == 1:
+                if row >= compare_row:
+                    max_row_firstname = row
+                else:
+                    break
+            elif cell.value is not None and column == 2:
+                if row >= compare_row:
+                    max_row_secondname = row
+                else:
+                    break
+            elif cell.value is not None and column == 3:
+                if row >= compare_row:
+                    max_row_lastname = row
+                else:
+                    break
+
+    print(f'\nQuick Check: There are {max_row_firstname + max_row_secondname} first names and {max_row_lastname} last names in your database.')
+
+
+def create_random_name(wb_filename):
+    wb = xl.load_workbook(wb_filename)
     sheet = wb['sheet1']
 
     # Get max non empty cell numbers for columns 1 - 3
@@ -42,30 +91,58 @@ def process_workbook():
     print(f'{cell_first_name.value} {cell_second_name.value} {cell_last_name.value}')
 
 
-result = input("[C]reate or [W]ork with existing database? ").capitalize()
+rng_intro()
 
-if result == 'C':
-    filename = input('Name your database: ')
-    wb_filename = f'{filename}.xlsx'
+is_input_valid = False
+while is_input_valid is False:
+    result = input("[C]reate or [W]ork with existing database? ").capitalize()
+    if result == 'C':
+        is_input_valid = True
+        filename = input('Name your database: ')
+        wb_filename = f'{filename}.xlsx'
 
-    start = time.process_time()
-    wb = xl.Workbook()
-    sheet = wb.active
-    sheet.title = "sheet1"
-    wb.save(wb_filename)
+        wb = xl.Workbook()
+        sheet = wb.active
+        sheet.title = "sheet1"
+        wb.save(wb_filename)
 
-    # Scrape first names (female + male) from vornamen.com
-    get_first_names.web_scrape_first_names(wb_filename)
-    # Scrape last names (German) from wikipedia.de
-    get_last_names.scraping_last_names_wikipedia(wb_filename)
-    # Scrape last names from familyeducation.com
-    get_last_names.scraping_last_names_familyeducationdotcom(wb_filename)
+        start_log = datetime.datetime.now()
+        # Scrape first names (female + male) from vornamen.com
+        get_first_names.web_scrape_first_names(wb_filename)
+        # Scrape last names (German) from wikipedia.de
+        #get_last_names.scraping_last_names_wikipedia(wb_filename)
+        # Scrape last names from familyeducation.com
+        #get_last_names.scraping_last_names_familyeducationdotcom(wb_filename)
 
-    end = time.time()
-    print(time.process_time() - start)
+        end_log = datetime.datetime.now()
+        duration = end_log - start_log
+        minutes, seconds = convert_timedelta(duration)
+        print('\nSuccessfully created database in {} minutes and {} seconds.'.format(minutes, seconds))
+    elif result == 'W':
+        is_input_valid = True
+        is_filename_valid = False
+        while is_filename_valid is False:
+            wb_filename = input('Type the name of your database with file extension (example: database.xlsx): ')
+            if Path(wb_filename).is_file():
+                is_filename_valid = True
+            else:
+                is_filename_valid = False
+                print('No file of that name exists. ')
+    else:
+        is_input_valid = False
+        print('Please choose [C]reate or [W]ork.')
 
-elif result == 'W':
-    print('Thanks!')
-
-
-
+statistics(wb_filename)
+get_more_names = True
+is_roll_dice_input_valid = False
+while get_more_names is True:
+    roll_dice = input('\n[N]ame or [Q]uit? ').capitalize()
+    if roll_dice == 'N':
+        is_roll_dice_input_valid = True
+        create_random_name(wb_filename)
+    elif roll_dice == 'Q':
+        is_roll_dice_input_valid = True
+        get_more_names = False
+    else:
+        is_roll_dice_input_valid = False
+        print('Please press [N] or [Q].')

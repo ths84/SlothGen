@@ -46,6 +46,7 @@ def web_scrape_first_names(wb_filename):
                         cell.value = name.text
                         row += 1
                         print(f'... {row} ... {cell.value}')
+                print(f'Letter {chr(url_part3)} ... DONE ... SAVING.')
             else:
                 print(f'{url_combine} not on server... continuing...')
 
