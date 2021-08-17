@@ -2,8 +2,7 @@ import random
 import datetime
 import time
 import openpyxl as xl
-import webscraping_first_names as get_first_names
-import webscraping_last_names as get_last_names
+from webscrape import webscraping_last_names as get_last_names, webscraping_first_names as get_first_names
 from pathlib import Path
 
 
