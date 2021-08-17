@@ -41,8 +41,8 @@ def statistics(wb_filename):
                     max_row_lastname = row
                 else:
                     break
-
-    print(f'\nQuick Check: There are {max_row_firstname} first names and {max_row_lastname} last names in your database.')
+    statistics.max_row_firstname = max_row_firstname
+    statistics.max_row_lastname = max_row_lastname
 
 
 def create_random_name(wb_filename, xcount):
@@ -120,8 +120,11 @@ while is_input_valid is False:
         print('Please choose [C]reate or [W]ork.')
 
 statistics(wb_filename)
+print(f'\nQuick Check: There are {statistics.max_row_firstname} first names and {statistics.max_row_lastname} last names in your database.')
+
 get_more_names = True
 is_roll_dice_input_valid = False
+
 while get_more_names is True:
     roll_dice = input("\n[S]ingle name, [N]umber of names or [Q]uit? ").capitalize()
     if roll_dice == 'S':
@@ -132,11 +135,16 @@ while get_more_names is True:
         is_roll_dice_input_valid = True
         get_more_names = False
     elif roll_dice == 'N':
-        xcount = int(input('Generate how many names? '))
         is_roll_dice_input_valid = True
-        for x in range(1, xcount + 1):
-            create_random_name(wb_filename, xcount)
+        is_xcount_corret = False
+        while is_xcount_corret is False:
+            try:
+                xcount = int(input('\nGenerate how many names? '))
+                is_xcount_corret = True
+                for x in range(1, xcount + 1):
+                    create_random_name(wb_filename, xcount)
+            except ValueError:
+                print('\nPlease enter a valid number.')
     else:
         is_roll_dice_input_valid = False
-
         print('Please press [N] or [Q].')
