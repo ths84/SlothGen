@@ -9,7 +9,7 @@ from pathlib import Path
 
 def rng_intro():
     print(f"""
-SlothGen 🦥 randomly and slowly combines two first names and one last name. 
+SlothGen 🦥 randomly and slowly combines two first names and one last name. ☕️
 
 First names from: https://www.vorname.com
 Last names from:  https://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Namen
@@ -81,16 +81,18 @@ rng_intro()
 
 is_input_valid = False
 while is_input_valid is False:
-    result = input("[C]reate or [W]ork with existing database? [Q] to quit. ").capitalize()
+    result = input("🦥 [C]reate or [W]ork with existing database? [Q] to stop slothing... ").capitalize()
     if result == 'C':
         is_input_valid = True
-        filename = input('Name your database: ')
+        filename = input('🦥 Name your database: ')
         wb_filename = f'{filename}.xlsx'
 
         wb = xl.Workbook()
         sheet = wb.active
         sheet.title = "sheet1"
         wb.save(wb_filename)
+
+        print('SlothGen slowly started building your database ... 🦥')
 
         start_log = datetime.datetime.now()
         # Scrape first names (female + male) from vornamen.com
@@ -103,7 +105,7 @@ while is_input_valid is False:
         end_log = datetime.datetime.now()
         duration = end_log - start_log
         minutes, seconds = convert_timedelta(duration)
-        print('\nSuccessfully created database in {} minutes and {} seconds.'.format(minutes, seconds))
+        print('\nSlothGen 🦥 successfully created your database in {} minutes and {} seconds.'.format(minutes, seconds))
     elif result == 'W':
         is_input_valid = True
         is_filename_valid = False
@@ -113,7 +115,7 @@ while is_input_valid is False:
                 is_filename_valid = True
             else:
                 is_filename_valid = False
-                print('No file of that name exists. ')
+                print('Sorry. No file of that name exists.\n')
     elif result == 'Q':
         exit()
     else:
@@ -121,20 +123,20 @@ while is_input_valid is False:
         print('Please choose [C]reate or [W]ork.')
 
 stats(wb_filename)
-print(f'\nQuick Check: There are {stats.max_row_firstname} first names and {stats.max_row_lastname} last names in your database.')
+print(f'\nSlothGen 🦥 found {stats.max_row_firstname} first names and {stats.max_row_lastname} last names in your database.')
 
 get_more_names = True
 is_roll_dice_input_valid = False
 
 while get_more_names is True:
-    roll_dice = input("\n[S]ingle name, [N]umber of names or [Q]uit? ").capitalize()
+    roll_dice = input("\n🦥 Generate [S]ingle name, [N]umber of names or [Q]uit? ").capitalize()
     if roll_dice == 'S':
         start = time.time()
         xcount = 1
         is_roll_dice_input_valid = True
         create_random_name(wb_filename, xcount)
         duration = time.time() - start
-        print('\nSlothGen 🦥 took %.0f seconds to generate your name.' % duration)
+        print('\n(SlothGen 🦥 took %.0f second(s) to generate your name.)' % duration)
     elif roll_dice == 'Q':
         is_roll_dice_input_valid = True
         get_more_names = False
@@ -144,7 +146,7 @@ while get_more_names is True:
         is_xcount_corret = False
         while is_xcount_corret is False:
             try:
-                xcount = int(input('\nGenerate how many names? '))
+                xcount = int(input('\n🦥 Generate how many names? '))
                 is_xcount_corret = True
                 print('Started slothing ... 🦥')
                 for x in range(1, xcount + 1):
@@ -152,7 +154,7 @@ while get_more_names is True:
             except ValueError:
                 print('\nPlease enter a valid number.')
         duration = time.time() - start
-        print('\nSlothGen 🦥 took %.0f seconds to generate your names.' % duration)
+        print('\n(SlothGen 🦥 took %.0f seconds to generate your names.)' % duration)
     else:
         is_roll_dice_input_valid = False
         print('Please press [N] or [Q].')
