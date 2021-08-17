@@ -131,12 +131,9 @@ is_roll_dice_input_valid = False
 while get_more_names is True:
     roll_dice = input("\n🦥 Generate [S]ingle name, [N]umber of names or [Q]uit? ").capitalize()
     if roll_dice == 'S':
-        start = time.time()
         xcount = 1
         is_roll_dice_input_valid = True
         create_random_name(wb_filename, xcount)
-        duration = time.time() - start
-        print('\n(SlothGen 🦥 took %.0f second(s) to generate your name.)' % duration)
     elif roll_dice == 'Q':
         is_roll_dice_input_valid = True
         get_more_names = False
