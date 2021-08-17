@@ -203,6 +203,7 @@
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
+    <option name="SHOW_OTHER_BRANCHES" value="true" />
     <option name="COLUMN_ID_ORDER">
       <list>
         <option value="Default.Root" />

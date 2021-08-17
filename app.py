@@ -1,5 +1,6 @@
 import random
 import datetime
+import time
 import openpyxl as xl
 import webscraping_first_names as get_first_names
 import webscraping_last_names as get_last_names
@@ -8,7 +9,7 @@ from pathlib import Path
 
 def rng_intro():
     print(f"""
-Randomly combine two first names and one last name. 
+SlothGen 🦥 randomly and slowly combines two first names and one last name. 
 
 First names from: https://www.vorname.com
 Last names from:  https://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Namen
@@ -23,7 +24,7 @@ def convert_timedelta(duration):
     return minutes, seconds
 
 
-def statistics(wb_filename):
+def stats(wb_filename):
     wb = xl.load_workbook(wb_filename)
     sheet = wb['sheet1']
 
@@ -33,16 +34,14 @@ def statistics(wb_filename):
             cell = sheet.cell(row, column)
             if cell.value is not None and column == 1:
                 if row >= compare_row:
-                    max_row_firstname = row
+                    stats.max_row_firstname = row
                 else:
                     break
             elif cell.value is not None and column == 2:
                 if row >= compare_row:
-                    max_row_lastname = row
+                    stats.max_row_lastname = row
                 else:
                     break
-    statistics.max_row_firstname = max_row_firstname
-    statistics.max_row_lastname = max_row_lastname
 
 
 def create_random_name(wb_filename, xcount):
@@ -56,19 +55,19 @@ def create_random_name(wb_filename, xcount):
             cell = sheet.cell(row, column)
             if cell.value is not None and column == 1:
                 if row >= compare_row:
-                    max_row_firstname = row
+                    stats.max_row_firstname = row
                 else:
                     break
             elif cell.value is not None and column == 2:
                 if row >= compare_row:
-                    max_row_lastname = row
+                    stats.max_row_lastname = row
                 else:
                     break
 
     # Get random cell numbers for column 1 - 2
-    dice_first_name = random.randint(1, max_row_firstname)
-    dice_second_name = random.randint(1, max_row_firstname)
-    dice_last_name = random.randint(1, max_row_lastname)
+    dice_first_name = random.randint(1, stats.max_row_firstname)
+    dice_second_name = random.randint(1, stats.max_row_firstname)
+    dice_last_name = random.randint(1, stats.max_row_lastname)
 
     # Set random cells for column 1 - 2
     cell_first_name = sheet.cell(dice_first_name, 1)
@@ -82,7 +81,7 @@ rng_intro()
 
 is_input_valid = False
 while is_input_valid is False:
-    result = input("[C]reate or [W]ork with existing database? ").capitalize()
+    result = input("[C]reate or [W]ork with existing database? [Q] to quit. ").capitalize()
     if result == 'C':
         is_input_valid = True
         filename = input('Name your database: ')
@@ -115,12 +114,14 @@ while is_input_valid is False:
             else:
                 is_filename_valid = False
                 print('No file of that name exists. ')
+    elif result == 'Q':
+        exit()
     else:
         is_input_valid = False
         print('Please choose [C]reate or [W]ork.')
 
-statistics(wb_filename)
-print(f'\nQuick Check: There are {statistics.max_row_firstname} first names and {statistics.max_row_lastname} last names in your database.')
+stats(wb_filename)
+print(f'\nQuick Check: There are {stats.max_row_firstname} first names and {stats.max_row_lastname} last names in your database.')
 
 get_more_names = True
 is_roll_dice_input_valid = False
@@ -128,23 +129,30 @@ is_roll_dice_input_valid = False
 while get_more_names is True:
     roll_dice = input("\n[S]ingle name, [N]umber of names or [Q]uit? ").capitalize()
     if roll_dice == 'S':
+        start = time.time()
         xcount = 1
         is_roll_dice_input_valid = True
         create_random_name(wb_filename, xcount)
+        duration = time.time() - start
+        print('\nSlothGen 🦥 took %.0f seconds to generate your name.' % duration)
     elif roll_dice == 'Q':
         is_roll_dice_input_valid = True
         get_more_names = False
     elif roll_dice == 'N':
+        start = time.time()
         is_roll_dice_input_valid = True
         is_xcount_corret = False
         while is_xcount_corret is False:
             try:
                 xcount = int(input('\nGenerate how many names? '))
                 is_xcount_corret = True
+                print('Started slothing ... 🦥')
                 for x in range(1, xcount + 1):
                     create_random_name(wb_filename, xcount)
             except ValueError:
                 print('\nPlease enter a valid number.')
+        duration = time.time() - start
+        print('\nSlothGen 🦥 took %.0f seconds to generate your names.' % duration)
     else:
         is_roll_dice_input_valid = False
         print('Please press [N] or [Q].')
