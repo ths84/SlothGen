@@ -1,0 +1,13 @@
+MANIFEST.in
+README
+requirements.txt
+setup.py
+SlothGen.egg-info/PKG-INFO
+SlothGen.egg-info/SOURCES.txt
+SlothGen.egg-info/dependency_links.txt
+SlothGen.egg-info/top_level.txt
+slothgen/__init__.py
+slothgen/app.py
+webscrape/__init__.py
+webscrape/webscraping_first_names.py
+webscrape/webscraping_last_names.py
