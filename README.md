@@ -21,7 +21,7 @@ cd SlothGen
     
 ## 🦥 Generating some names
 
-![SlothGen](slothgen.png?raw=true "SlothGen Intro")
+![SlothGen](images/slothgen_intro.png?raw=true "SlothGen Intro")
 
 Upon starting SlothGen you are able to create a fresh database or work with an existing one. 
 The database will provide first and last names to generate a new (and never seen before) name.
