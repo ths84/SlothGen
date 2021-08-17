@@ -6,7 +6,7 @@ SlothGen ðŸ¦¥ randomly and slowly combines two first names and one last name. â˜
 
 Python > 3.6
 
-### Clone Repository
+### Clone Repository:
 
 ```
 git clone https://github.com/ths84/SlothGen.git
