@@ -1,10 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
 import re
-import openpyxl as xl
+import json
 
 
-def scraping_last_names_wikipedia(wb_filename):
+def scraping_last_names_wikipedia(database_name):
+    # Load JSON database
+    with open(database_name) as file:
+        database = json.load(file)
+
     url = 'https://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Namen/die_häufigsten_Nachnamen_Deutschlands'
     html_source = requests.get(url).text
     response = requests.get(url)
@@ -12,35 +16,33 @@ def scraping_last_names_wikipedia(wb_filename):
         soup = BeautifulSoup(html_source, 'lxml')
         content_block = soup.find('ol')
 
-        wb = xl.load_workbook(wb_filename)
-        sheet = wb["sheet1"]
-        row = 1
-        column = 2
         for name in content_block.find_all('a', title=True):
-            cell = sheet.cell(row, column)
-            cell.value = name.text
-            row += 1
-            print(f'... {row} ... {cell.value}')
-        print('DONE ... SAVING.')
+            if name.text in database['last_names']:
+                print(f"... {name.text} already in database ... skipping ...")
+            else:
+                new_name = name.text
+                database['last_names'].append(new_name)
+                print(f'... 🦥 slothing last names from {url} ... {name.text}')
     else:
         print(f'{url} not on server... continuing...')
 
-    wb.save(wb_filename)
+    # Sort names alphabetically
+    sorted_last_names = sorted(database['last_names'])
+    database['last_names'] = sorted_last_names
+
+    # Saving JSON database
+    with open(database_name, 'w') as file:
+        print('DONE ... SAVING.')
+        json.dump(database, file, indent=2)
 
 
-def scraping_last_names_familyeducationdotcom(wb_filename):
-    wb = xl.load_workbook(wb_filename)
-    sheet = wb["sheet1"]
-    column = 2
-    # Get starting row in Excel sheet to append new names to existing ones
-    for row in sheet.iter_cols(min_row=1, min_col=2, max_col=2):
-        for cell in row:
-            if cell.value is not None:
-                starting_row = cell.row
+def scraping_last_names_familyeducationdotcom(database_name):
+    # Load JSON database
+    with open(database_name) as file:
+        database = json.load(file)
 
     url_root = 'https://www.familyeducation.com/baby-names/browse-names/surname'
     for url_appendix in range(ord('a'), ord('z') + 1):
-        wb.save(wb_filename)
         url_combine = f'{url_root}/{chr(url_appendix)}'
         html_source = requests.get(url_combine).text
         response = requests.get(url_combine)
@@ -83,27 +85,36 @@ def scraping_last_names_familyeducationdotcom(wb_filename):
                     section = soup.find('section', {'id': 'block-fentheme-content'})
                     names_list = section.find_all('a', {'href': re.compile("/baby-names/name-meaning/")})
                     for name in names_list:
-                        last_name = name.text
-                        cell = sheet.cell(starting_row, column)
-                        cell.value = name.text
-                        starting_row += 1
-                        print(f'... {starting_row} ... {cell.value}')
-                print(f'Letter {chr(url_appendix)} ... DONE.')
+                        if name.text in database['last_names']:
+                            print(f"... {name.text} already in database ... skipping ...")
+                        else:
+                            new_name = name.text
+                            database['last_names'].append(new_name)
+                            print(f'... 🦥 slothing last names from {url_combine} ... {name.text}')
+                print(f'Letter {chr(url_appendix).capitalize()} ... DONE.')
             else:
-                print(f'No pagination found on site; continuing with name scrape ...')
+                print(f'No pagination found on site; continuing to scrape ...')
                 html_source = requests.get(f'{url_root}/{chr(url_appendix)}').text
                 soup = BeautifulSoup(html_source, 'lxml')
                 section = soup.find('section', {'id': 'block-fentheme-content'})
                 names_list = section.find_all('a', {'href': re.compile("/baby-names/name-meaning/")})
                 for name in names_list:
-                    last_name = name.text
-                    cell = sheet.cell(starting_row, column)
-                    cell.value = name.text
-                    starting_row += 1
-                    print(f'... {starting_row} ... {cell.value}')
-                print(f'Letter {chr(url_appendix)} ... DONE ... SAVING.')
+                    if name.text in database['last_names']:
+                        print(f"... {name.text} already in database ... skipping ...")
+                    else:
+                        new_name = name.text
+                        database['last_names'].append(new_name)
+                        print(f'... 🦥 slothing last names from {url_combine} ... {name.text}')
+                print(f'Letter {chr(url_appendix).capitalize()} ... DONE ... SAVING.')
 
         else:
             print(f'{url_root} not on server... continuing...')
 
-    wb.save(wb_filename)
+    # Sort names alphabetically
+    sorted_last_names = sorted(database['last_names'])
+    database['last_names'] = sorted_last_names
+
+    # Saving JSON database
+    with open(database_name, 'w') as file:
+        print('DONE ... SAVING.')
+        json.dump(database, file, indent=2)

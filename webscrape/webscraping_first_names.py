@@ -1,26 +1,19 @@
 from bs4 import BeautifulSoup
 import requests
-import openpyxl as xl
+import json
 
 
-def web_scrape_first_names(wb_filename):
-    wb = xl.load_workbook(wb_filename)
-    sheet = wb.active
+def web_scrape_first_names(database_name):
+    # Load JSON database
+    with open(database_name) as file:
+        database = json.load(file)
+
     url_root = 'https://www.vorname.com'
     url_part2 = ['maedchennamen', 'jungennamen']
     for part_in_url_part2 in url_part2:
-        # Get starting row in Excel sheet to append new names to existing ones
-        column = 1
-        for starting_row in sheet.iter_cols(min_row=1, min_col=1, max_col=1):
-            for cell in starting_row:
-                if cell.value is None:
-                    starting_row = cell.row
-                elif cell.value is not None:
-                    starting_row = cell.row + 1
 
         # Loop through all first names starting from 'A' to 'Z'
         for url_part3 in range(ord('A'), ord('Z') + 1):
-            wb.save(wb_filename)
             url_combine = f'{url_root}/{part_in_url_part2},{chr(url_part3)},1.html'
             response = requests.get(url_combine)
             if response.status_code == 200:
@@ -33,6 +26,7 @@ def web_scrape_first_names(wb_filename):
 
                 checker = None
                 while checker is None:
+
                     html_source2 = requests.get(f'{url_root}/{links[-1]}').text
                     soup = BeautifulSoup(html_source2, 'lxml')
                     pagination = soup.find('div', class_='pagination')
@@ -47,14 +41,35 @@ def web_scrape_first_names(wb_filename):
                 for link in links:
                     html_source = requests.get(f'{url_root}/{link}').text
                     soup = BeautifulSoup(html_source, 'lxml')
-                    female_first_names = soup.find_all('td', class_='name')
-                    for name in female_first_names:
-                        cell = sheet.cell(starting_row, column)
-                        cell.value = name.text
-                        starting_row += 1
-                        print(f'... {starting_row} ... {cell.value}')
-                print(f'Letter {chr(url_part3)} ... DONE ... SAVING.')
+                    first_names = soup.find_all('td', class_='name')
+                    if part_in_url_part2 == 'maedchennamen':
+                        for name in first_names:
+                            if name.text in database['first_names']['female_first_names']:
+                                print(f"... {name.text} already in database ... skipping ...")
+                            else:
+                                new_name = name.text
+                                database['first_names']['female_first_names'].append(new_name)
+                                print(f'... 🦥 slothing first names from {url_combine} ... {name.text}')
+                    elif part_in_url_part2 == 'jungennamen':
+                        for name in first_names:
+                            if name.text in database['first_names']['male_first_names']:
+                                print(f"... {name.text} already in database ... skipping ...")
+                            else:
+                                new_name = name.text
+                                database['first_names']['male_first_names'].append(new_name)
+                                print(f'... 🦥 slothing first names from {url_combine} ... {name.text}')
+                    else:
+                        print('SlothGen 🦥 encountered an unusual error... Sorry!')
+                print(f'Letter {chr(url_part3)} ... DONE.')
             else:
                 print(f'{url_combine} not on server... continuing...')
 
-    wb.save(wb_filename)
+    # Sort all first names alphabetically
+    sorted_male_first_names = sorted(database['first_names']['male_first_names'])
+    sorted_female_first_names = sorted(database['first_names']['female_first_names'])
+    database['first_names']['male_first_names'] = sorted_male_first_names
+    database['first_names']['female_first_names'] = sorted_female_first_names
+
+    # Saving JSON database
+    with open(database_name, 'w') as file:
+        json.dump(database, file, indent=2)
