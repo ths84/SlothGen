@@ -4,6 +4,55 @@ import re
 import json
 
 
+def scraping_last_names_surnameweb(database_name):
+    # Load JSON database
+    with open(database_name) as file:
+        database = json.load(file)
+
+    url_root = 'http://www.surnameweb.org/registry/'
+    html_source = requests.get(url_root).text
+    response = requests.get(url_root)
+    if response.status_code == 200:
+        soup = BeautifulSoup(html_source, 'lxml')
+        found_urls = soup.find_all('a', href=True)
+        all_urls = []
+        for i in found_urls:
+            url_part2 = i.text
+            if len(i.text) == 6:
+                url_combined = f'{url_root}{url_part2}'
+                all_urls.append(url_combined)
+
+        for url in all_urls:
+            html_source = requests.get(url).text
+            soup = BeautifulSoup(html_source, 'lxml')
+            section = soup.find('blockquote')
+            if "Surname" in section.text:
+                last_name = section.text
+                last_name_cleaned = re.sub(r'\sSurname', '', last_name)
+                if "," in last_name_cleaned:
+                    last_name_cleaned = re.sub(r'\s,\s', '', last_name_cleaned)
+                last_name_cleaned = last_name_cleaned.split()
+
+                for name in last_name_cleaned:
+                    if name in database['last_names']:
+                        print(f"... {name} already in database ... skipping ...")
+                    else:
+                        database['last_names'].append(name)
+                        print(f'... 🦥 slothing last names from {url} ... {name}')
+
+    else:
+        print(f'{url_root} not on server... continuing...')
+
+    # Sort names alphabetically
+    sorted_last_names = sorted(database['last_names'])
+    database['last_names'] = sorted_last_names
+
+    # Saving JSON database
+    with open(database_name, 'w') as file:
+        print('DONE ... SAVING.')
+        json.dump(database, file, indent=2)
+
+
 def scraping_last_names_wikipedia(database_name):
     # Load JSON database
     with open(database_name) as file:
