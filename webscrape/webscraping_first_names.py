@@ -64,16 +64,14 @@ def scraping_first_names_vornamedotcom(database_name):
                             if name.text in database['first_names']['female_first_names']:
                                 print(f"... {name.text} already in database ... skipping ...")
                             else:
-                                new_name = name.text
-                                database['first_names']['female_first_names'].append(new_name)
+                                database['first_names']['female_first_names'].append(name.text)
                                 print(f'... 🦥 slothing first names from {url_combine} ... {name.text}')
                     elif part_in_url_part2 == 'jungennamen':
                         for name in first_names:
                             if name.text in database['first_names']['male_first_names']:
                                 print(f"... {name.text} already in database ... skipping ...")
                             else:
-                                new_name = name.text
-                                database['first_names']['male_first_names'].append(new_name)
+                                database['first_names']['male_first_names'].append(name.text)
                                 print(f'... 🦥 slothing first names from {url_combine} ... {name.text}')
                     else:
                         print('SlothGen 🦥 encountered an unusual error... Sorry!')
@@ -114,7 +112,6 @@ def scraping_first_names_magicmamandotcom(database_name):
             for x in range(num_first_string, num_last_string + 1):
                 missing_link = f'{url_root}{x_in_url_part2}-{x}'
                 complete_links.append(missing_link)
-            print(complete_links)
 
             # Get names from all pages
             for link in complete_links:

@@ -69,8 +69,7 @@ def scraping_last_names_wikipedia(database_name):
             if name.text in database['last_names']:
                 print(f"... {name.text} already in database ... skipping ...")
             else:
-                new_name = name.text
-                database['last_names'].append(new_name)
+                database['last_names'].append(name.text)
                 print(f'... 🦥 slothing last names from {url} ... {name.text}')
     else:
         print(f'{url} not on server... continuing...')
@@ -140,7 +139,7 @@ def scraping_last_names_familyeducationdotcom(database_name):
                             new_name = name.text
                             database['last_names'].append(new_name)
                             print(f'... 🦥 slothing last names from {url_combine} ... {name.text}')
-                print(f'Letter {chr(url_appendix).capitalize()} ... DONE.')
+                print(f'Letter {chr(url_appendix).upper()} ... DONE.')
             else:
                 print(f'No pagination found on site; continuing to scrape ...')
                 html_source = requests.get(f'{url_root}/{chr(url_appendix)}').text
@@ -154,7 +153,7 @@ def scraping_last_names_familyeducationdotcom(database_name):
                         new_name = name.text
                         database['last_names'].append(new_name)
                         print(f'... 🦥 slothing last names from {url_combine} ... {name.text}')
-                print(f'Letter {chr(url_appendix).capitalize()} ... DONE ... SAVING.')
+                print(f'Letter {chr(url_appendix).upper()} ... DONE ... SAVING.')
 
         else:
             print(f'{url_root} not on server... continuing...')
