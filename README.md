@@ -23,7 +23,7 @@ cd SlothGen
 
 Upon starting SlothGen you are able to create a fresh database or work with an existing one. 
 The database will provide first and last names to generate a new (and never seen before) name.
-<br><br>A sample database with the filename **"test_db.xlsx"** is already provided and ready to use.
+<br><br>A sample database with the filename **"database.json"** is already provided and ready to use.
 If you want to create a fresh database, SlothGen will first scrape some names from different websites (see below). 
 The scraping process will take some time...
 
@@ -32,5 +32,7 @@ The scraping process will take some time...
 The following websites are currently scraped for building a database for names:
 
 - https://www.vorname.com
+- https://www.magicmaman.com
 - https://de.wiktionary.org/wiki/Verzeichnis:Deutsch/Namen
 - https://www.familyeducation.com
+- http://www.surnameweb.org
