@@ -212,43 +212,6 @@ def create_random_names(name_register):
                 else:
                     print('Please choose a valid option.')
                 create_random_names(name_register)
-        # elif menu_choise == 'A':
-        #     while True:
-        #         set_gender = input(
-        #             'Are you adding [f]emale, [m]ale, [u]ndefined or [l]ast names? '
-        #             '\nType [b] to step back ... ').lower()
-        #         if set_gender == 'f':
-        #             new_user_names = input(
-        #                 'Type the name(s) you want to add (separate names using whitespaces): ').split(' ')
-        #             for i in new_user_names:
-        #                 if i in name_register.female_first_names:
-        #                     print(f'{i} already in database.\n')
-        #                 else:
-        #                     name_register.female_first_names.append(i)
-        #                     name_register.saving_database()
-        #                     print(f'{i} was added to >>> female 1st names.\n')
-        #         elif set_gender == 'm':
-        #             new_user_names = input(
-        #                 'Type the name(s) you want to add (separate names using whitespaces): ').split(' ')
-        #             for i in new_user_names:
-        #                 if i in name_register.male_first_names:
-        #                     print(f'{i} already in database.\n')
-        #                 else:
-        #                     name_register.male_first_names.append(i)
-        #                     print(f'{i} was added to >>> male 1st names.\n')
-        #         elif set_gender == 'u':
-        #             print('Reminder @Thomas: implement non-gender names!!\n')
-        #         elif set_gender == 'l':
-        #             new_user_names = input(
-        #                 'Type the name(s) you want to add (separate names using whitespaces): ').split(' ')
-        #             for i in new_user_names:
-        #                 if i in name_register.last_names:
-        #                     print(f'{i} already in database.\n')
-        #                 else:
-        #                     name_register.last_names.append(i)
-        #                     print(f'{i} was added to >>> last names.\n')
-        #         elif set_gender == 'b':
-        #             create_random_names(name_register)
         elif menu_choise == 'Q':
             sys.exit(0)
         elif menu_choise == 'B':
@@ -256,32 +219,6 @@ def create_random_names(name_register):
         elif menu_choise == 'E':
             xcount = int(input(f'How many names do you want to export? '))
             name_register.export_random_names(xcount)
-        # elif menu_choise == 'U':
-        #     while True:
-        #         scope = str(input(f'Do you want to update [a]ll or only [f]irst or [l]ast names?'
-        #                           f'\nType [b] to step back ... ')).lower()
-        #         if scope == 'f':
-        #             scope = 'first_names_only'
-        #             start_scraping(name_register.database_name, scope)
-        #             name_register.timestamp = datetime.datetime.now()
-        #             input(f'Press ENTER to continue.')
-        #             create_random_names(name_register)
-        #         elif scope == 'a':
-        #             scope = "full"
-        #             start_scraping(name_register.database_name, scope)
-        #             name_register.timestamp = datetime.datetime.now()
-        #             input(f'Press ENTER to continue.')
-        #             create_random_names(name_register)
-        #         elif scope == 'l':
-        #             scope = 'last_names_only'
-        #             start_scraping(name_register.database_name, scope)
-        #             name_register.timestamp = datetime.datetime.now()
-        #             input(f'Press ENTER to continue.')
-        #             create_random_names(name_register)
-        #         elif scope == 'b':
-        #             create_random_names(name_register)
-        #         else:
-        #             print(f'Please choose a valid option.')
         elif menu_choise == 'L':
             while True:
                 try:
